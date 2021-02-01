@@ -1,4 +1,7 @@
-<?php session_start();?>
+<?php 
+
+if(!isset($_SESSION))
+  session_start();?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container"> 
       <a class="navbar-brand" href="#"><i class="fas fa-tenge"></i> TheZone</a>
