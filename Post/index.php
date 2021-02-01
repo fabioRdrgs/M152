@@ -31,7 +31,7 @@ $_SESSION['currentPage'] =  "Post";
 <form action="./index.php" enctype="multipart/form-data"> 
 
 <label for="postTextArea">Entrez du text</label></br>
-<textarea id="postTextArea" rows="20" cols="50"></textarea></br>
+<textarea id="postTextArea" rows="3" cols="50"></textarea></br>
 <label for="fileSelect"> Select a file:</label> <input id="fileSelect" type="file" name="img[]" multiple>
 <input type="submit">
 </form>

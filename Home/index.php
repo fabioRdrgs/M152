@@ -50,6 +50,8 @@ $_SESSION['currentPage'] = "Home";
            <img src="../img/NoPFP.jpg" alt="Image de Profile" class=" card-img-bottom" style="width:20%">
           
           </div>
+
+          
        </div>
 
       

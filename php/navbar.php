@@ -11,7 +11,7 @@
             <div class="input-group-append">
                 <button type="button" class="btn btn-secondary"><i class="fa fa-search"></i></button>
             </div>
-        </div>
+    </div>
     </form>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
@@ -24,5 +24,5 @@
         </ul>
       </div>
     </div>
-  </nav>
+</nav>
  
