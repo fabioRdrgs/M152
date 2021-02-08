@@ -46,22 +46,20 @@ for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
 {
 $Orgfilename = $_FILES["imgSelect"]["name"][$i];
 $dir = "../tmp/";
-$filename = $Orgfilename;   
-$copyCount = 0;
-preg_match("(.png|.bmp|.jpg|.jpeg|.gif)",$Orgfilename,$matches);
-while(file_exists($dir.$filename))
-{
-$copyCount++;  
-$ext = $matches[0];
-$filename = preg_replace("(.png|.bmp|.jpg|.jpeg|.gif)",$copyCount.$ext,$Orgfilename);
-}
+$ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
+var_dump($ext);
+$file = uniqid().'.'.$ext;
 
-  if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir. $filename))
+if(in_array($ext,["png","bmp","jpg","jpeg","gif"]))
+{
+  if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
   echo "Fichiers uploadés";
   else
   echo "Error lors de l'upload";
-
+  }
 }
+
+
 var_dump($_FILES["imgSelect"]);
 ?>
 
