@@ -1,5 +1,9 @@
 <?php
-session_start();
+require_once "../php/sql_func.inc.php";
+
+if(!isset($_SESSION))
+  session_start();
+
 $_SESSION['currentPage'] =  "Post";
 ?>
 <!DOCTYPE html>
@@ -28,17 +32,49 @@ $_SESSION['currentPage'] =  "Post";
   <!-- Navigation -->
   <?php include_once "../php/navbar.php"?>
   <!--#endregion -->
-<form action="./index.php" enctype="multipart/form-data"> 
+<form action="./index.php" method="POST" enctype="multipart/form-data"> 
 
 <label for="postTextArea">Entrez du text</label></br>
 <textarea id="postTextArea" rows="3" cols="50"></textarea></br>
-<label for="fileSelect"> Select a file:</label> <input id="fileSelect" type="file" name="img[]" multiple>
+<label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept="image/*" type="file" name="imgSelect[]" multiple>
 <input type="submit">
 </form>
 
-<?php var_dump($_FILES);
+<?php 
+for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
+{
+$Orgfilename = $_FILES["imgSelect"]["name"][$i];
+$filename = uniqid();
+$dir = "../tmp/";
 
-var_dump($_GET['img']);?>
+$ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
+var_dump($ext);
+$file = $filename.'.'.$ext;
+
+if(in_array($ext,["png","bmp","jpg","jpeg","gif"]))
+{
+  if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
+  {
+   
+    if(uploadImg($filename,$ext))
+    echo "Fichiers uploadés";
+    else
+    {
+      echo "Error lors de l'upload";
+      unlink($dir.$file);
+    }   
+  }
+  else
+  echo "Error lors de l'upload";
+  }
+  else
+  echo "Veuillez sélectionner des fichiers valides!";
+  
+}
+
+
+var_dump($_FILES["imgSelect"]);
+?>
 
  <!-- Footer -->
  <footer class="py-5 bg-dark">
