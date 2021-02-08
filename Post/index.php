@@ -1,9 +1,8 @@
-
 <?php
+require_once "../php/sql_func.inc.php";
+
 if(!isset($_SESSION))
   session_start();
-
-
 
 $_SESSION['currentPage'] =  "Post";
 ?>
@@ -45,18 +44,32 @@ $_SESSION['currentPage'] =  "Post";
 for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
 {
 $Orgfilename = $_FILES["imgSelect"]["name"][$i];
+$filename = uniqid();
 $dir = "../tmp/";
+
 $ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
 var_dump($ext);
-$file = uniqid().'.'.$ext;
+$file = $filename.'.'.$ext;
 
 if(in_array($ext,["png","bmp","jpg","jpeg","gif"]))
 {
   if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
-  echo "Fichiers uploadés";
+  {
+   
+    if(uploadImg($filename,$ext))
+    echo "Fichiers uploadés";
+    else
+    {
+      echo "Error lors de l'upload";
+      unlink($dir.$file);
+    }   
+  }
   else
   echo "Error lors de l'upload";
   }
+  else
+  echo "Veuillez sélectionner des fichiers valides!";
+  
 }
 
 

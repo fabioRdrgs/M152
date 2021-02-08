@@ -4,7 +4,7 @@
   Auteur     : F. Rodrigues dos Santos
   Sujet      : ???
  */
-require "./constantes.inc.php";
+require "../php/constantes.inc.php";
 
 /**
  * Connecteur de la base de données du .
@@ -78,21 +78,18 @@ function readAll($limit = 0, $offset = 50)
 
   return $answer;
 }
-function create($content1, $content2, $content3, $content4, $content5)
+function uploadImg($nom, $type)
 {
   static $ps = null;
-  $sql = "INSERT INTO `table` (`content1`, `content2`, `content3`, `content4`, `content5`) ";
-  $sql .= "VALUES (:CONTENT1, :CONTENT2, :CONTENT3, :CONTENT4, :CONTENT5)";
+  $sql = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`dateDeCreation`)";
+  $sql .= "VALUES (:NOM, :TYPE, CURRENT_DATE())";
   if ($ps == null) {
     $ps = db()->prepare($sql);
   }
   $answer = false;
   try {
-    $ps->bindParam(':CONTENT1', $content1, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT2', $content2, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT3', $content3, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT4', $content4, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT5', $content5, PDO::PARAM_STR);
+    $ps->bindParam(':NOM', $nom, PDO::PARAM_STR);
+    $ps->bindParam(':TYPE', $type, PDO::PARAM_STR);
 
     $answer = $ps->execute();
   } catch (PDOException $e) {
@@ -100,6 +97,7 @@ function create($content1, $content2, $content3, $content4, $content5)
   }
   return $answer;
 }
+
 function update($content1, $content2, $content3, $content4, $content5)
 {
   static $ps = null;
