@@ -97,7 +97,29 @@ function uploadImg($nom, $type)
   }
   return $answer;
 }
-
+function createNewPost($commentaire,$listImages)
+{
+  try {
+    db()->beginTransaction();
+        $req = db()->prepare("INSERT INTO `post` (`commentaire`) VALUES (:COMMENTAIRE)");
+    $req->bindParam(':COMMENTAIRE',$commentaire,PDO::PARAM_STR);
+    $req->execute();
+$idPost = db()->lastInsertId();
+    $req = db()->prepare("INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VALUES (:NOM,:EXT,:IDPOST)");
+    foreach($listImages as $img)
+    {   
+    $req->bindParam(':NOM',$img[0],PDO::PARAM_STR);
+    $req->bindParam(':EXT',$img[1],PDO::PARAM_STR);
+    $req->bindParam('IDPOST',$idPost,PDO::PARAM_INT);
+    $req->execute();
+    }
+    db()->commit();
+    return true;
+    } catch (Exception $e) {
+      db()->rollBack();
+    return false;
+    }
+}
 function update($content1, $content2, $content3, $content4, $content5)
 {
   static $ps = null;
@@ -148,4 +170,6 @@ function delete($id)
   }
   return $answer;
 }
+
+
 ?>

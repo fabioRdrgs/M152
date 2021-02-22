@@ -1,4 +1,5 @@
 <?php
+require_once '../php/user_show_post.inc.php';
 if (!isset($_SESSION))
   session_start();
 $_SESSION['currentPage'] = "Home";
@@ -37,27 +38,37 @@ $_SESSION['currentPage'] = "Home";
     <div class="row">
       <!-- Profile column -->
       <div class="col-md-4">
-
         <!-- Profile Info -->
         <div class="card my-4">
           <div class="card-header">
             <img src="../img/Ville.png" alt="Image du Blog" class="card-img-top">
             <h6 class="card-text">Bienvenue sur MonEspace</h6>
           </div>
-
           <div class="card-body">
             <h6 class="card-title">F. Santos</h6>
             <p class="card-text">239 Followers, 0 Posts</p>
             <img src="../img/NoPFP.jpg" alt="Image de Profile" class=" card-img-bottom" style="width:20%">
           </div>
-
         </div>
       </div> 
  
     
-      <!-- a Post -->
-      <div class="col-md-8">
-        <!-- Blog Post -->
+      <!-- Post Column -->
+    <div class="col-md-8">
+
+     <?php
+     $arrayImgs = show_all_images();
+     if($arrayImgs != null)
+     {
+      foreach($arrayImgs as $img)
+      {
+        echo "<div class=\"card mb-4\"> <img style=\"width:700px;height:300px;\"class=\"card-img-top\" src=\"../tmp/".$img['NomImage'].".".$img['extImage']."\" alt=\"Card image cap\"> <div class=\"card-body\"> <h2 class=\"card-title\">Post Title</h2> <p class=\"card-text\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p> <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> </div> <div class=\"card-footer text-muted\"> Posted on January 1, 2020 by <a href=\"#\">Start Bootstrap</a> </div> </div>";
+      }
+     }
+     ?>
+     
+
+      <!-- Template Post
         <div class="card mb-4">
           <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
           <div class="card-body">
@@ -69,9 +80,10 @@ $_SESSION['currentPage'] = "Home";
             Posted on January 1, 2020 by
             <a href="#">Start Bootstrap</a>
           </div>
-        </div>
-      </div>
+       </div>
+    -->
     </div>
+     
     <!-- /.container -->
 
   </div>
