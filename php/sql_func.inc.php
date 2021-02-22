@@ -81,8 +81,8 @@ function readAll($limit = 0, $offset = 50)
 function uploadImg($nom, $type)
 {
   static $ps = null;
-  $sql = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`dateDeCreation`)";
-  $sql .= "VALUES (:NOM, :TYPE, CURRENT_DATE())";
+  $sql = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`)";
+  $sql .= "VALUES (:NOM, :TYPE)";
   if ($ps == null) {
     $ps = db()->prepare($sql);
   }

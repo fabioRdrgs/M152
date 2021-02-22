@@ -51,28 +51,28 @@ $ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
 var_dump($ext);
 $file = $filename.'.'.$ext;
 
-if(in_array($ext,["png","bmp","jpg","jpeg","gif"]))
-{
-  if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
+  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && filesize($Orgfilename) < 3145728)
   {
-   
-    if(uploadImg($filename,$ext))
-    echo "Fichiers uploadés";
-    else
+    if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
     {
-      echo "Error lors de l'upload";
-      unlink($dir.$file);
-    }   
-  }
-  else
-  echo "Error lors de l'upload";
+    
+      if(uploadImg($filename,$ext))
+      echo "Fichiers uploadés";
+      else
+      {
+        echo "Error lors de l'upload";
+        unlink($dir.$file);
+      }   
+    }
+    else
+    echo "Error lors de l'upload";
   }
   else
   echo "Veuillez sélectionner des fichiers valides!";
   
 }
 
-
+echo "filesize: ". filesize("../tmp");
 var_dump($_FILES["imgSelect"]);
 ?>
 
