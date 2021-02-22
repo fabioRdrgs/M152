@@ -35,7 +35,7 @@ $_SESSION['currentPage'] =  "Post";
 <form action="./index.php" method="POST" enctype="multipart/form-data"> 
 
 <label for="postTextArea">Entrez du text</label></br>
-<textarea id="postTextArea" rows="3" cols="50"></textarea></br>
+<textarea required id="postTextArea" rows="3" cols="50"></textarea></br>
 <label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept="image/*" type="file" name="imgSelect[]" multiple>
 <input type="submit">
 </form>
@@ -51,7 +51,7 @@ $ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
 var_dump($ext);
 $file = $filename.'.'.$ext;
 
-  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && filesize($Orgfilename) < 3145728)
+  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'] < 3145728)
   {
     if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
     {
@@ -69,7 +69,6 @@ $file = $filename.'.'.$ext;
   }
   else
   echo "Veuillez sélectionner des fichiers valides!";
-  
 }
 
 echo "filesize: ". filesize("../tmp");
