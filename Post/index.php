@@ -47,7 +47,7 @@ for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
   $filename = uniqid();
   $dir = "../tmp/";
   $listImages = array();
-  $ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
+  $ext = explode("/",$_FILES["imgSelect"]["type"][$i])[1];
   $file = $filename.'.'.$ext;
   
     if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'][$i] < 3145728)
