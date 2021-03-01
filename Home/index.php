@@ -57,14 +57,50 @@ $_SESSION['currentPage'] = "Home";
     <div class="col-md-8">
 
      <?php
-     $arrayImgs = show_all_images();
-     if($arrayImgs != null)
+     $arrayPosts = show_all_Posts();
+     $imgsPost =[];
+      //For permettant d'afficher chaque posts
+     for($i = 1; $i <= count($arrayPosts);$i++)
      {
-      foreach($arrayImgs as $img)
-      {
-        echo "<div class=\"card mb-4\"> <img style=\"width:700px;height:300px;\"class=\"card-img-top\" src=\"../tmp/".$img['NomImage'].".".$img['extImage']."\" alt=\"Card image cap\"> <div class=\"card-body\"> <h2 class=\"card-title\">Post Title</h2> <p class=\"card-text\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p> <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> </div> <div class=\"card-footer text-muted\"> Posted on January 1, 2020 by <a href=\"#\">Start Bootstrap</a> </div> </div>";
-      }
+       //Si l'id actuel est égal à l'id précédant, insère le nom de l'image ainsi que son extension dans un array pour utilisation future
+        if($arrayPosts[$i-1]['idPost'] == $arrayPosts[$i]['idPost'])
+        {
+          array_push($imgsPost,[$arrayPosts[$i-1]['NomImage'],$arrayPosts[$i-1]['extImage']]);                   
+        }
+        //Lorsque l'id n'est plus le même, cela veut dire qu'il y a un autre post actuellement. Donc nous allons ajouter la dernière image à l'array
+        //Précédement crée et afficher le post précédant avant de vider l'array pour recommencer l'opération autant de fois que le for se lance qui est
+        //égal aux d'images au total pour tous les posts
+        else
+        {
+          array_push($imgsPost,[$arrayPosts[$i-1]['NomImage'],$arrayPosts[$i-1]['extImage']]); 
+
+          //Affiche le post
+          echo
+           "<div class=\"card mb-4\"> ";
+                //Affiche chaque images
+                foreach($imgsPost as $img)
+                {
+                 echo "<img style=\"width:300px;height:100px;\"class=\"card-img-top\" src=\"../tmp/".$img[0].".".$img[1]."\" alt=\"Card image cap\">";
+                }
+               echo " <div class=\"card-body\"> 
+                <p class=\"card-text\">";
+                //Affiche le commentaire
+                echo $arrayPosts[$i-1]['postCommentaire'];
+                echo "</p>
+                  <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> 
+                  </div> 
+                  <div class=\"card-footer text-muted\"> Posté le : ";
+                  //Affiche la date de création du post
+                  $dateCreationPost =  explode(" ",$arrayPosts[$i-1]['postDateCreation']);
+                  echo $dateCreationPost[0]. " à ". $dateCreationPost[1];
+
+                  echo " by F. Santos</div> 
+            </div>"; 
+            $imgsPost = [];         
+        }
      }
+
+     
      ?>
      
 

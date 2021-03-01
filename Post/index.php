@@ -44,6 +44,13 @@ $_SESSION['currentPage'] =  "Post";
 
 <?php 
 $UserPostImages = [];
+$totalSize = 0;
+for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
+{
+  $totalSize+=$_FILES["imgSelect"]['size'][$i];
+}
+
+if($totalSize < 70000000)
 for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
 {
   $Orgfilename = $_FILES["imgSelect"]["name"][$i];
@@ -54,14 +61,23 @@ for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
   $file = $filename.'.'.$ext;
   
 
-  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'][$i] < 3145728)
+  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'][$i] < 3145728 )
   {
     if($commentairePost != "")
     {
-      array_push($UserPostImages, [$filename,$ext]);
-    
-
-     
+      if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
+        {       
+          if(uploadImg($filename,$ext))
+          echo "Fichiers uploadés";
+          else
+          {
+            echo "Error lors de l'upload";
+            unlink($dir.$file);
+          }   
+        }
+        else
+        echo "Error lors de l'upload";
+      array_push($UserPostImages, [$filename,$ext]);  
     }
     else
     {
@@ -76,35 +92,10 @@ for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
     echo "Veuillez sélectionner des fichiers valides!";
     return;
   }
-
-
-  
-
-/*
-    if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'][$i] < 3145728)
-    {
-      if($commentairePost != "")
-      {
-        if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
-        {       
-          if(uploadImg($filename,$ext))
-          echo "Fichiers uploadés";
-          else
-          {
-            echo "Error lors de l'upload";
-            unlink($dir.$file);
-          }   
-        }
-        else
-        echo "Error lors de l'upload";
-      }
-      else
-      echo "Veuillez écrire un commentaire";
-      
-    }
-    else
-    echo "Veuillez sélectionner des fichiers valides!";*/
 }
+else
+echo "Le total de fichiers fournis est trop lourd! Veuillez en sélectionner de plus légers";
+
 if(createNewPost($commentairePost,$UserPostImages))
   echo "Post Crée";
   else
