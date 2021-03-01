@@ -43,34 +43,33 @@ $_SESSION['currentPage'] =  "Post";
 <?php 
 for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
 {
-$Orgfilename = $_FILES["imgSelect"]["name"][$i];
-$filename = uniqid();
-$dir = "../tmp/";
-$listImages = array();
-$ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
-$file = $filename.'.'.$ext;
-
-  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'] < 3145728)
-  {
-    if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
+  $Orgfilename = $_FILES["imgSelect"]["name"][$i];
+  $filename = uniqid();
+  $dir = "../tmp/";
+  $listImages = array();
+  $ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
+  $file = $filename.'.'.$ext;
+  
+    if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'][$i] < 3145728)
     {
-      
-      if(uploadImg($filename,$ext))
-      echo "Fichiers uploadés";
-      else
+      if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
       {
-        echo "Error lors de l'upload";
-        unlink($dir.$file);
-      }   
+        
+        if(uploadImg($filename,$ext))
+        echo "Fichiers uploadés";
+        else
+        {
+          echo "Error lors de l'upload";
+          unlink($dir.$file);
+        }   
+      }
+      else
+      echo "Error lors de l'upload";
     }
     else
-    echo "Error lors de l'upload";
-  }
-  else
-  echo "Veuillez sélectionner des fichiers valides!";
+    echo "Veuillez sélectionner des fichiers valides!";
 }
-
-echo "filesize: ". filesize("../tmp");
+var_dump($ext);
 var_dump($_FILES["imgSelect"]);
 ?>
 
