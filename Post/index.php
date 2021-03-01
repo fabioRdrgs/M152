@@ -68,7 +68,10 @@ for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
       if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
         {       
           if(uploadImg($filename,$ext))
-          echo "Fichiers uploadés";
+          {    echo "Fichiers uploadés";
+            array_push($UserPostImages, [$filename,$ext]);  
+          }
+      
           else
           {
             echo "Error lors de l'upload";
@@ -77,7 +80,7 @@ for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
         }
         else
         echo "Error lors de l'upload";
-      array_push($UserPostImages, [$filename,$ext]);  
+     
     }
     else
     {
