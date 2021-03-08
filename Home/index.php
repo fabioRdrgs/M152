@@ -58,27 +58,27 @@ $_SESSION['currentPage'] = "Home";
 
      <?php
      $arrayPosts = show_all_Posts();
-     $imgsPost =[];
+     $mediaPost =[];
       //For permettant d'afficher chaque posts
      for($i = 1; $i <= count($arrayPosts);$i++)
      {
        //Si l'id actuel est égal à l'id précédant, insère le nom de l'image ainsi que son extension dans un array pour utilisation future
         if($arrayPosts[$i-1]['idPost'] == $arrayPosts[$i]['idPost'])
         {
-          array_push($imgsPost,[$arrayPosts[$i-1]['NomImage'],$arrayPosts[$i-1]['extImage']]);                   
+          array_push($mediaPost,[$arrayPosts[$i-1]['NomMedia'],$arrayPosts[$i-1]['extMedia']]);                   
         }
         //Lorsque l'id n'est plus le même, cela veut dire qu'il y a un autre post actuellement. Donc nous allons ajouter la dernière image à l'array
         //Précédement crée et afficher le post précédant avant de vider l'array pour recommencer l'opération autant de fois que le for se lance qui est
         //égal aux d'images au total pour tous les posts
         else
         {
-          array_push($imgsPost,[$arrayPosts[$i-1]['NomImage'],$arrayPosts[$i-1]['extImage']]); 
+          array_push($mediaPost,[$arrayPosts[$i-1]['NomMedia'],$arrayPosts[$i-1]['extMedia']]); 
 
           //Affiche le post
           echo
            "<div class=\"card mb-4\"> ";
                 //Affiche chaque images
-                foreach($imgsPost as $img)
+                foreach($mediaPost as $img)
                 {
                  echo "<img style=\"width:300px;height:100px;\"class=\"card-img-top\" src=\"../tmp/".$img[0].".".$img[1]."\" alt=\"Card image cap\">";
                 }
@@ -96,7 +96,7 @@ $_SESSION['currentPage'] = "Home";
 
                   echo " by F. Santos</div> 
             </div>"; 
-            $imgsPost = [];         
+            $mediaPost = [];         
         }
      }
 
