@@ -69,7 +69,7 @@ $_SESSION['currentPage'] = "Home";
         }
         //Lorsque l'id n'est plus le même, cela veut dire qu'il y a un autre post actuellement. Donc nous allons ajouter la dernière image à l'array
         //Précédement crée et afficher le post précédant avant de vider l'array pour recommencer l'opération autant de fois que le for se lance qui est
-        //égal aux d'images au total pour tous les posts
+        //égal au nombre total d'images pour tous les posts
         else
         {
           array_push($imgsPost,[$arrayPosts[$i-1]['NomImage'],$arrayPosts[$i-1]['extImage']]); 
