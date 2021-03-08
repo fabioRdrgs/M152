@@ -1,4 +1,5 @@
 <?php
+require_once '../php/user_show_post.inc.php';
 if (!isset($_SESSION))
   session_start();
 $_SESSION['currentPage'] = "Home";
@@ -37,27 +38,82 @@ $_SESSION['currentPage'] = "Home";
     <div class="row">
       <!-- Profile column -->
       <div class="col-md-4">
-
         <!-- Profile Info -->
         <div class="card my-4">
           <div class="card-header">
             <img src="../img/Ville.png" alt="Image du Blog" class="card-img-top">
             <h6 class="card-text">Bienvenue sur MonEspace</h6>
           </div>
-
           <div class="card-body">
             <h6 class="card-title">F. Santos</h6>
             <p class="card-text">239 Followers, 0 Posts</p>
             <img src="../img/NoPFP.jpg" alt="Image de Profile" class=" card-img-bottom" style="width:20%">
           </div>
-
         </div>
       </div> 
  
     
-      <!-- a Post -->
-      <div class="col-md-8">
-        <!-- Blog Post -->
+      <!-- Post Column -->
+    <div class="col-md-8">
+
+     <?php
+     $arrayPosts = show_all_Posts();
+     $mediaPost =[];
+      //For permettant d'afficher chaque posts
+     for($i = 1; $i <= count($arrayPosts);$i++)
+     {
+       //Si l'id actuel est égal à l'id précédant, insère le nom de l'image ainsi que son extension dans un array pour utilisation future
+        if($arrayPosts[$i-1]['idPost'] == $arrayPosts[$i]['idPost'])
+        {
+          array_push($mediaPost,[$arrayPosts[$i-1]['NomMedia'],$arrayPosts[$i-1]['extMedia']]);                   
+        }
+        //Lorsque l'id n'est plus le même, cela veut dire qu'il y a un autre post actuellement. Donc nous allons ajouter la dernière image à l'array
+        //Précédement crée et afficher le post précédant avant de vider l'array pour recommencer l'opération autant de fois que le for se lance qui est
+        //égal aux d'images au total pour tous les posts
+        else
+        {
+          array_push($mediaPost,[$arrayPosts[$i-1]['NomMedia'],$arrayPosts[$i-1]['extMedia']]); 
+
+          //Affiche le post
+          echo
+           "<div class=\"card mb-4\"> ";
+                //Affiche chaque images
+                foreach($mediaPost as $media)
+                {
+                  if($media[1] == "mp4")
+                  echo "<video autoplay controls>
+                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mp4\">
+                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/ogg\">
+                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/webm\">
+                  Your browser does not support the video tag.
+                  </video>";
+                  else
+                 echo "<img style=\"width:300px;height:100px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
+                }
+               echo " <div class=\"card-body\"> 
+                <p class=\"card-text\">";
+                //Affiche le commentaire
+                echo $arrayPosts[$i-1]['postCommentaire'];
+                echo "</p>
+                  <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> 
+                  </div> 
+                  <div class=\"card-footer text-muted\"> Posté le : ";
+                  //Affiche la date de création du post
+                  $dateCreationPost =  explode(" ",$arrayPosts[$i-1]['postDateCreation']);
+                  echo $dateCreationPost[0]. " à ". $dateCreationPost[1];
+
+                  echo " by F. Santos</div> 
+            </div>"; 
+            var_dump($mediaPost); 
+            $mediaPost = [];         
+        }
+     }
+
+  
+     ?>
+     
+
+      <!-- Template Post
         <div class="card mb-4">
           <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
           <div class="card-body">
@@ -69,9 +125,10 @@ $_SESSION['currentPage'] = "Home";
             Posted on January 1, 2020 by
             <a href="#">Start Bootstrap</a>
           </div>
-        </div>
-      </div>
+       </div>
+    -->
     </div>
+     
     <!-- /.container -->
 
   </div>

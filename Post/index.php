@@ -1,7 +1,9 @@
 <?php
 require_once "../php/sql_func.inc.php";
 
-if(!isset($_SESSION))
+$commentairePost = filter_input(INPUT_POST, 'postTextArea', FILTER_SANITIZE_STRING);
+
+if (!isset($_SESSION))
   session_start();
 
 $_SESSION['currentPage'] =  "Post";
@@ -30,53 +32,81 @@ $_SESSION['currentPage'] =  "Post";
 
   <!--#region Navigation  -->
   <!-- Navigation -->
-  <?php include_once "../php/navbar.php"?>
+  <?php include_once "../php/navbar.php" ?>
   <!--#endregion -->
-<form action="./index.php" method="POST" enctype="multipart/form-data"> 
+  <form action="./index.php" method="POST" enctype="multipart/form-data">
 
-<label for="postTextArea">Entrez du text</label></br>
-<textarea required id="postTextArea" rows="3" cols="50"></textarea></br>
-<label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept="image/*" type="file" name="imgSelect[]" multiple>
-<input type="submit">
-</form>
+    <label for="postTextArea">Entrez du text</label></br>
+    <textarea required name="postTextArea" id="postTextArea" rows="3" cols="50"></textarea></br>
+    <label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept=".png, .bmp, .jpg, .jpeg, .gif, .mp4" type="file" name="mediaSelect[]" multiple>
+    <input type="submit">
+  </form>
 
-<?php 
-for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
-{
-$Orgfilename = $_FILES["imgSelect"]["name"][$i];
-$filename = uniqid();
-$dir = "../tmp/";
-
-$ext = explode("image/",$_FILES["imgSelect"]["type"][$i])[1];
-var_dump($ext);
-$file = $filename.'.'.$ext;
-
-  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'] < 3145728)
+  <?php
+  $UserPostMedia = [];
+  $totalSize = 0;
+  $totalCountMedia = 0;
+  if (isset($_FILES["mediaSelect"])) 
   {
-    if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
+    var_dump($_FILES["mediaSelect"]);
+    for ($i = 0; $i < count($_FILES["mediaSelect"]['name']); $i++) 
     {
-    
-      if(uploadImg($filename,$ext))
-      echo "Fichiers uploadés";
-      else
-      {
-        echo "Error lors de l'upload";
-        unlink($dir.$file);
-      }   
+      $totalSize += $_FILES["mediaSelect"]['size'][$i];
+      $totalCountMedia++;
+    }
+     echo $totalCountMedia;
+    if ($totalCountMedia <= 4)
+     {
+
+      if ($totalSize < 140000000)
+       {
+        for ($i = 0; $i < count($_FILES["mediaSelect"]['name']); $i++) {
+          $Orgfilename = $_FILES["mediaSelect"]["name"][$i];
+          $filename = uniqid();
+          $dir = "../tmp/";
+          $listImages = array();
+          $ext = explode("/", $_FILES["mediaSelect"]["type"][$i])[1];
+          $file = $filename . '.' . $ext;
+
+          if ($commentairePost != "") {
+            if (in_array($ext, ["png", "bmp", "jpg", "jpeg", "gif", "mp4"]) && $_FILES["mediaSelect"]['size'][$i] < 15145728) {
+
+              array_push($UserPostMedia, [$filename, $ext]);
+            } else {
+              echo "Veuillez sélectionner des fichiers valides!";
+              return;
+            }
+          } else {
+            echo "Veuillez écrire un commentaire";
+            return;
+          }
+        }
+      } else {
+        echo "Le total de fichiers fournis est trop lourd! Veuillez en sélectionner de plus légers";
+        return;
+      }
+      var_dump($UserPostMedia);
+
+      if (createNewPost($commentairePost, $UserPostMedia)) {
+        for ($i = 0; $i < count($_FILES["mediaSelect"]['name']); $i++) {
+          if (move_uploaded_file($_FILES["mediaSelect"]["tmp_name"][$i], $dir . $UserPostMedia[$i][0] . "." . $UserPostMedia[$i][1])) {
+            echo "Fichiers uploadés";
+          }
+        }
+      } else
+        echo "Erreur lors de la création du Post";
+
+      var_dump($_FILES["mediaSelect"]);
     }
     else
-    echo "Error lors de l'upload";
+    echo "Veuillez ne sélectionner que 4 médias maximum!";
   }
-  else
-  echo "Veuillez sélectionner des fichiers valides!";
-}
 
-echo "filesize: ". filesize("../tmp");
-var_dump($_FILES["imgSelect"]);
-?>
 
- <!-- Footer -->
- <footer class="py-5 bg-dark">
+  ?>
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; TheZone</p>
     </div>

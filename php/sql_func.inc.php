@@ -98,6 +98,43 @@ function uploadImg($nom, $type)
   return $answer;
 }
 
+function createNewPost($commentaire,$listImages)
+{
+
+$sqlCreateCom = "INSERT INTO `post` (`commentaire`) VALUES (:COMMENTAIRE)";
+$sqlAddImage = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VALUES (:NOM,:EXT,:IDPOST)";
+
+
+  try {
+    static $req = null;
+    if($req == null)
+    $req = db()->prepare($sqlCreateCom );
+
+    db()->beginTransaction();
+    $req->bindParam(':COMMENTAIRE',$commentaire,PDO::PARAM_STR);
+    $req->execute();
+    $idPost = db()->lastInsertId();
+
+
+    static $req2 = null;
+    if($req2 == null)
+    $req2 = db()->prepare($sqlAddImage);
+  
+    foreach($listImages as $img)
+    {   
+    $req2->bindParam(':NOM',$img[0],PDO::PARAM_STR);
+    $req2->bindParam(':EXT',$img[1],PDO::PARAM_STR);
+    $req2->bindParam('IDPOST',$idPost,PDO::PARAM_INT);
+    $req2->execute();
+    }
+    db()->commit();
+    return true;
+    } catch (Exception $e) {
+      db()->rollBack();
+    return false;
+    }
+}
+
 function update($content1, $content2, $content3, $content4, $content5)
 {
   static $ps = null;
@@ -148,4 +185,6 @@ function delete($id)
   }
   return $answer;
 }
+
+
 ?>
