@@ -1,9 +1,9 @@
 <?php
 require_once "../php/sql_func.inc.php";
 
-$commentairePost = filter_input(INPUT_POST,'postTextArea',FILTER_SANITIZE_STRING);
+$commentairePost = filter_input(INPUT_POST, 'postTextArea', FILTER_SANITIZE_STRING);
 
-if(!isset($_SESSION))
+if (!isset($_SESSION))
   session_start();
 
 $_SESSION['currentPage'] =  "Post";
@@ -32,80 +32,83 @@ $_SESSION['currentPage'] =  "Post";
 
   <!--#region Navigation  -->
   <!-- Navigation -->
-  <?php include_once "../php/navbar.php"?>
+  <?php include_once "../php/navbar.php" ?>
   <!--#endregion -->
-<form action="./index.php" method="POST" enctype="multipart/form-data"> 
+  <form action="./index.php" method="POST" enctype="multipart/form-data">
 
-<label for="postTextArea">Entrez du text</label></br>
-<textarea required name="postTextArea" id="postTextArea" rows="3" cols="50"></textarea></br>
-<label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept="image/*" type="file" name="imgSelect[]" multiple>
-<input type="submit">
-</form>
+    <label for="postTextArea">Entrez du text</label></br>
+    <textarea required name="postTextArea" id="postTextArea" rows="3" cols="50"></textarea></br>
+    <label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept="image/*" type="file" name="imgSelect[]" multiple>
+    <input type="submit">
+  </form>
 
-<?php 
-$UserPostImages = [];
-$totalSize = 0;
-for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
-{
-  $totalSize+=$_FILES["imgSelect"]['size'][$i];
-}
-
-if($totalSize < 70000000)
-for($i = 0; $i < count($_FILES["imgSelect"]['name']) ; $i++)
-{
-  $Orgfilename = $_FILES["imgSelect"]["name"][$i];
-  $filename = uniqid();
-  $dir = "../tmp/";
-  $listImages = array();
-  $ext = explode("/",$_FILES["imgSelect"]["type"][$i])[1];
-  $file = $filename.'.'.$ext;
-  
-
-  if(in_array($ext,["png","bmp","jpg","jpeg","gif"]) && $_FILES["imgSelect"]['size'][$i] < 3145728 )
+  <?php
+  $UserPostImages = [];
+  $totalSize = 0;
+  if(isset($_FILES["imgSelect"]))
   {
-    if($commentairePost != "")
+    for ($i = 0; $i < count($_FILES["imgSelect"]['name']); $i++) 
     {
-      if(move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i],$dir.$file))
-        {       
-          if(uploadImg($filename,$ext))
-          echo "Fichiers uploadés";
-          else
-          {
-            echo "Error lors de l'upload";
-            unlink($dir.$file);
-          }   
-        }
-        else
-        echo "Error lors de l'upload";
-      array_push($UserPostImages, [$filename,$ext]);  
+      $totalSize += $_FILES["imgSelect"]['size'][$i];
     }
+  
+    if ($totalSize < 70000000)
+    {
+      for ($i = 0; $i < count($_FILES["imgSelect"]['name']); $i++) 
+      {
+        $Orgfilename = $_FILES["imgSelect"]["name"][$i];
+        $filename = uniqid();
+        $dir = "../tmp/";
+        $listImages = array();
+        $ext = explode("/", $_FILES["imgSelect"]["type"][$i])[1];
+        $file = $filename . '.' . $ext;
+  
+        if ($commentairePost != "") 
+        {
+          if (in_array($ext, ["png", "bmp", "jpg", "jpeg", "gif"]) && $_FILES["imgSelect"]['size'][$i] < 3145728) 
+          {
+            array_push($UserPostImages, [$filename, $ext]);
+          }
+           else 
+           {
+            echo "Veuillez sélectionner des fichiers valides!";
+            return;
+          }
+        } 
+        else 
+        {
+          echo "Veuillez écrire un commentaire";
+          return;
+        }
+      }
+    } 
     else
     {
-      echo "Veuillez écrire un commentaire";
+      echo "Le total de fichiers fournis est trop lourd! Veuillez en sélectionner de plus légers";
       return;
     }
+      var_dump($UserPostImages);
   
-    
+    if (createNewPost($commentairePost, $UserPostImages)) 
+    {
+      for ($i = 0; $i < count($_FILES["imgSelect"]['name']); $i++) 
+      {
+        if (move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i], $dir. $UserPostImages[$i][0] ."." . $UserPostImages[$i][1]))
+        {
+          echo "Fichiers uploadés";
+        }
+      }
+    } 
+    else
+      echo "Erreur lors de la création du Post";
+  
+    var_dump($_FILES["imgSelect"]);
   }
-  else
-  {
-    echo "Veuillez sélectionner des fichiers valides!";
-    return;
-  }
-}
-else
-echo "Le total de fichiers fournis est trop lourd! Veuillez en sélectionner de plus légers";
+  
+  ?>
 
-if(createNewPost($commentairePost,$UserPostImages))
-  echo "Post Crée";
-  else
-  echo "Erreur lors de la création du Post";
-var_dump($ext);
-var_dump($_FILES["imgSelect"]);
-?>
-
- <!-- Footer -->
- <footer class="py-5 bg-dark">
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; TheZone</p>
     </div>
