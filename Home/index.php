@@ -79,22 +79,15 @@ $_SESSION['currentPage'] = "Home";
            "<div class=\"card mb-4\"> ";
                 //Affiche chaque images
                 foreach($mediaPost as $media)
-                {
-<<<<<<< Updated upstream
-                  if($media[1] == "mp4")
-                  echo "<video autoplay controls>
-=======
+                {              
                   if($media[1] == "mp4" || $media[1] == "ogg" || $media[1] == "webm")
                   echo "
                   <video autoplay controls loop>
->>>>>>> Stashed changes
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mp4\">
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/ogg\">
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/webm\">
                   Your browser does not support the video tag.
                   </video>";
-<<<<<<< Updated upstream
-=======
                   else if ($media[1] == "mpeg" || $media[1] == "ogg")
                   {
                       echo "
@@ -103,7 +96,6 @@ $_SESSION['currentPage'] = "Home";
                       <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mpeg\">
                       </audio>";
                   }
->>>>>>> Stashed changes
                   else
                  echo "<img style=\"width:300px;height:250px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
                 }

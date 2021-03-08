@@ -1,3 +1,4 @@
+
 <?php
 require_once "../php/sql_func.inc.php";
 
@@ -38,7 +39,7 @@ $_SESSION['currentPage'] =  "Post";
 
     <label for="postTextArea">Entrez du text</label></br>
     <textarea required name="postTextArea" id="postTextArea" rows="3" cols="50"></textarea></br>
-    <label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept=".png, .bmp, .jpg, .jpeg, .gif, .mp4, .ogg, .webm" type="file" name="mediaSelect[]" multiple>
+    <label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept=".png, .bmp, .jpg, .jpeg, .gif, .mp4, .mp3, .ogg" type="file" name="mediaSelect[]" multiple>
     <input type="submit">
   </form>
 
@@ -69,7 +70,7 @@ $_SESSION['currentPage'] =  "Post";
           $file = $filename . '.' . $ext;
 
           if ($commentairePost != "") {
-            if (in_array($ext, ["png", "bmp", "jpg", "jpeg", "gif", "mp4","ogg","webm"]) && $_FILES["mediaSelect"]['size'][$i] < 15145728) {
+            if (in_array($ext, ["png", "bmp", "jpg", "jpeg", "gif", "mp4", "ogg", "mpeg"]) && $_FILES["mediaSelect"]['size'][$i] < 15145728) {
 
               array_push($UserPostMedia, [$filename, $ext]);
             } else {
