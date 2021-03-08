@@ -168,18 +168,18 @@ function update($content1, $content2, $content3, $content4, $content5)
  * @param mixed $idnote 
  * @return bool 
  */
-function delete($id)
+function deletePost($idPost)
 {
   static $ps = null;
-  $sql = "DELETE FROM `table` WHERE (`id` = :ID);";
+  $sql = "DELETE FROM `post` WHERE (`id` = :ID);";
   if ($ps == null) {
     $ps = db()->prepare($sql);
   }
   $answer = false;
   try {
-    $ps->bindParam(':ID', $id, PDO::PARAM_INT);
+    $ps->bindParam(':ID', $idPost, PDO::PARAM_INT);
     $ps->execute();
-    $answer = ($ps->rowCount() > 0);
+    $answer = true;
   } catch (PDOException $e) {
     echo $e->getMessage();
   }

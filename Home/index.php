@@ -65,14 +65,14 @@ $_SESSION['currentPage'] = "Home";
        //Si l'id actuel est égal à l'id précédant, insère le nom de l'image ainsi que son extension dans un array pour utilisation future
         if($arrayPosts[$i-1]['idPost'] == $arrayPosts[$i]['idPost'])
         {
-          array_push($mediaPost,[$arrayPosts[$i-1]['NomMedia'],$arrayPosts[$i-1]['extMedia']]);                   
+          array_push($mediaPost,[$arrayPosts[$i-1]['nomMedia'],$arrayPosts[$i-1]['extMedia']]);                   
         }
         //Lorsque l'id n'est plus le même, cela veut dire qu'il y a un autre post actuellement. Donc nous allons ajouter la dernière image à l'array
         //Précédement crée et afficher le post précédant avant de vider l'array pour recommencer l'opération autant de fois que le for se lance qui est
         //égal aux d'images au total pour tous les posts
         else
         {
-          array_push($mediaPost,[$arrayPosts[$i-1]['NomMedia'],$arrayPosts[$i-1]['extMedia']]); 
+          array_push($mediaPost,[$arrayPosts[$i-1]['nomMedia'],$arrayPosts[$i-1]['extMedia']]); 
 
           //Affiche le post
           echo
@@ -80,15 +80,32 @@ $_SESSION['currentPage'] = "Home";
                 //Affiche chaque images
                 foreach($mediaPost as $media)
                 {
+<<<<<<< Updated upstream
                   if($media[1] == "mp4")
                   echo "<video autoplay controls>
+=======
+                  if($media[1] == "mp4" || $media[1] == "ogg" || $media[1] == "webm")
+                  echo "
+                  <video autoplay controls loop>
+>>>>>>> Stashed changes
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mp4\">
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/ogg\">
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/webm\">
                   Your browser does not support the video tag.
                   </video>";
+<<<<<<< Updated upstream
+=======
+                  else if ($media[1] == "mpeg" || $media[1] == "ogg")
+                  {
+                      echo "
+                      <audio  controls>
+                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"audio/ogg\">
+                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mpeg\">
+                      </audio>";
+                  }
+>>>>>>> Stashed changes
                   else
-                 echo "<img style=\"width:300px;height:100px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
+                 echo "<img style=\"width:300px;height:250px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
                 }
                echo " <div class=\"card-body\"> 
                 <p class=\"card-text\">";
@@ -96,6 +113,7 @@ $_SESSION['currentPage'] = "Home";
                 echo $arrayPosts[$i-1]['postCommentaire'];
                 echo "</p>
                   <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> 
+                  <a href=\"../php/deleteFile.php?idPost=". $arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Supprimer le post</a>
                   </div> 
                   <div class=\"card-footer text-muted\"> Posté le : ";
                   //Affiche la date de création du post
