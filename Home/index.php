@@ -80,13 +80,20 @@ $_SESSION['currentPage'] = "Home";
                 //Affiche chaque images
                 foreach($mediaPost as $media)
                 {
-                  if($media[1] == "mp4")
+                  if($media[1] == "mp4" || $media[1] == "ogg" || $media[1] == "webm")
                   echo "<video autoplay controls>
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mp4\">
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/ogg\">
                   <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/webm\">
                   Your browser does not support the video tag.
                   </video>";
+                  else if ($media[1] == "mpeg" || $media[1] == "ogg")
+                  {
+                      echo "<audio  controls>
+                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"audio/ogg\">
+                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mpeg\">
+                      </audio>";
+                  }
                   else
                  echo "<img style=\"width:300px;height:100px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
                 }
