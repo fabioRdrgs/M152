@@ -40,10 +40,28 @@ function get_all_posts_id()
 
   return $answer;
 }
+function getPostMedia($idPost)
+{
+  static $ps = null;
+  $sql = 'SELECT nomFichierMedia as `nomMedia`, typeMedia as `extMedia` FROM `media` WHERE idPost = :IDPOST ;';
+  if ($ps == null) {
+    $ps = db()->prepare($sql);
+  }
+  $answer = false;
+  try {
+    $ps->bindParam(':IDPOST', $idPost, PDO::PARAM_INT);
 
+    if ($ps->execute())
+      $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
+  } catch (PDOException $e) {
+    echo $e->getMessage();
+  }
+
+  return $answer;
+}
 function show_all_Posts()
 {
-  $sql = "SELECT post.id as `idPost`,post.commentaire as `postCommentaire`, post.datePost as `postDateCreation`, nomFichierMedia as `NomMedia`, typeMedia as `extMedia` FROM `media` JOIN `post` ON (media.idPost = post.id) ORDER BY post.id";
+  $sql = "SELECT post.id as `idPost`,post.commentaire as `postCommentaire`, post.datePost as `postDateCreation`, nomFichierMedia as `nomMedia`, typeMedia as `extMedia` FROM `media` JOIN `post` ON (media.idPost = post.id) ORDER BY post.id";
   static $ps = null;
   if ($ps == null) {
     $ps = db()->prepare($sql);
