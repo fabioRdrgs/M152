@@ -78,9 +78,17 @@ $_SESSION['currentPage'] = "Home";
           echo
            "<div class=\"card mb-4\"> ";
                 //Affiche chaque images
-                foreach($mediaPost as $img)
+                foreach($mediaPost as $media)
                 {
-                 echo "<img style=\"width:300px;height:100px;\"class=\"card-img-top\" src=\"../tmp/".$img[0].".".$img[1]."\" alt=\"Card image cap\">";
+                  if($media[1] == "mp4")
+                  echo "<video autoplay controls>
+                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mp4\">
+                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/ogg\">
+                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/webm\">
+                  Your browser does not support the video tag.
+                  </video>";
+                  else
+                 echo "<img style=\"width:300px;height:100px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
                 }
                echo " <div class=\"card-body\"> 
                 <p class=\"card-text\">";
@@ -96,11 +104,12 @@ $_SESSION['currentPage'] = "Home";
 
                   echo " by F. Santos</div> 
             </div>"; 
+            var_dump($mediaPost); 
             $mediaPost = [];         
         }
      }
 
-     
+  
      ?>
      
 

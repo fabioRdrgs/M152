@@ -38,7 +38,7 @@ $_SESSION['currentPage'] =  "Post";
 
     <label for="postTextArea">Entrez du text</label></br>
     <textarea required name="postTextArea" id="postTextArea" rows="3" cols="50"></textarea></br>
-    <label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept=".png, .bmp, .jpg, .jpeg, .gif, .mp4" type="file" name="imgSelect[]" multiple>
+    <label for="fileSelect"> Select a file:</label> <input id="fileSelect" accept=".png, .bmp, .jpg, .jpeg, .gif, .mp4" type="file" name="mediaSelect[]" multiple>
     <input type="submit">
   </form>
 
@@ -46,27 +46,30 @@ $_SESSION['currentPage'] =  "Post";
   $UserPostMedia = [];
   $totalSize = 0;
   $totalCountMedia = 0;
-  if (isset($_FILES["imgSelect"])) 
+  if (isset($_FILES["mediaSelect"])) 
   {
-    for ($i = 0; $i < count($_FILES["imgSelect"]['name']); $i++) 
+    var_dump($_FILES["mediaSelect"]);
+    for ($i = 0; $i < count($_FILES["mediaSelect"]['name']); $i++) 
     {
-      $totalSize += $_FILES["imgSelect"]['size'][$i];
+      $totalSize += $_FILES["mediaSelect"]['size'][$i];
       $totalCountMedia++;
     }
+     echo $totalCountMedia;
     if ($totalCountMedia <= 4)
      {
-      if ($totalSize < 70000000)
+
+      if ($totalSize < 140000000)
        {
-        for ($i = 0; $i < count($_FILES["imgSelect"]['name']); $i++) {
-          $Orgfilename = $_FILES["imgSelect"]["name"][$i];
+        for ($i = 0; $i < count($_FILES["mediaSelect"]['name']); $i++) {
+          $Orgfilename = $_FILES["mediaSelect"]["name"][$i];
           $filename = uniqid();
           $dir = "../tmp/";
           $listImages = array();
-          $ext = explode("/", $_FILES["imgSelect"]["type"][$i])[1];
+          $ext = explode("/", $_FILES["mediaSelect"]["type"][$i])[1];
           $file = $filename . '.' . $ext;
 
           if ($commentairePost != "") {
-            if (in_array($ext, ["png", "bmp", "jpg", "jpeg", "gif", "mp4"]) && $_FILES["imgSelect"]['size'][$i] < 3145728) {
+            if (in_array($ext, ["png", "bmp", "jpg", "jpeg", "gif", "mp4"]) && $_FILES["mediaSelect"]['size'][$i] < 15145728) {
 
               array_push($UserPostMedia, [$filename, $ext]);
             } else {
@@ -85,15 +88,15 @@ $_SESSION['currentPage'] =  "Post";
       var_dump($UserPostMedia);
 
       if (createNewPost($commentairePost, $UserPostMedia)) {
-        for ($i = 0; $i < count($_FILES["imgSelect"]['name']); $i++) {
-          if (move_uploaded_file($_FILES["imgSelect"]["tmp_name"][$i], $dir . $UserPostMedia[$i][0] . "." . $UserPostMedia[$i][1])) {
+        for ($i = 0; $i < count($_FILES["mediaSelect"]['name']); $i++) {
+          if (move_uploaded_file($_FILES["mediaSelect"]["tmp_name"][$i], $dir . $UserPostMedia[$i][0] . "." . $UserPostMedia[$i][1])) {
             echo "Fichiers uploadés";
           }
         }
       } else
         echo "Erreur lors de la création du Post";
 
-      var_dump($_FILES["imgSelect"]);
+      var_dump($_FILES["mediaSelect"]);
     }
     else
     echo "Veuillez ne sélectionner que 4 médias maximum!";
