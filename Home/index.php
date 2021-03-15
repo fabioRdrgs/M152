@@ -25,6 +25,20 @@ $_SESSION['currentPage'] = "Home";
 </head>
 
 <body>
+ <!-- Template Post
+        <div class="card mb-4">
+          <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+          <div class="card-body">
+            <h2 class="card-title">Post Title</h2>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+            <a href="#" class="btn btn-primary">Read More &rarr;</a>
+          </div>
+          <div class="card-footer text-muted">
+            Posted on January 1, 2020 by
+            <a href="#">Start Bootstrap</a>
+          </div>
+       </div>
+    -->
   <!--#region Navigation  -->
 
   <!-- Navigation -->
@@ -56,98 +70,101 @@ $_SESSION['currentPage'] = "Home";
       <!-- Post Column -->
     <div class="col-md-8">
 
-     <?php
-     $arrayPosts = show_all_Posts();
-     $mediaPost =[];
-      //For permettant d'afficher chaque posts
-     for($i = 1; $i <= count($arrayPosts);$i++)
-     {
-       //Si l'id actuel est égal à l'id précédant, insère le nom de l'image ainsi que son extension dans un array pour utilisation future
-        if($arrayPosts[$i-1]['idPost'] == $arrayPosts[$i]['idPost'])
-        {
-          array_push($mediaPost,[$arrayPosts[$i-1]['nomMedia'],$arrayPosts[$i-1]['extMedia']]);                   
-        }
-        //Lorsque l'id n'est plus le même, cela veut dire qu'il y a un autre post actuellement. Donc nous allons ajouter la dernière image à l'array
-        //Précédement crée et afficher le post précédant avant de vider l'array pour recommencer l'opération autant de fois que le for se lance qui est
-        //égal aux d'images au total pour tous les posts
-        else
-        {
-          array_push($mediaPost,[$arrayPosts[$i-1]['nomMedia'],$arrayPosts[$i-1]['extMedia']]); 
+      <?php
+      $arrayPosts = show_all_Posts();
+      $mediaPost =[];
+        //For permettant d'afficher chaque posts
+      for($i = 1; $i <= count($arrayPosts);$i++)
+      {
+        if($arrayPosts[$i-1]['nomMedia'] != null)
+        {  
+          //Si l'id actuel est égal à l'id précédant, insère le nom de l'image ainsi que son extension dans un array pour utilisation future
+            if($arrayPosts[$i-1]['idPost'] == $arrayPosts[$i]['idPost'])
+            {
+              array_push($mediaPost,[$arrayPosts[$i-1]['nomMedia'],$arrayPosts[$i-1]['extMedia']]);                   
+            }
+            //Lorsque l'id n'est plus le même, cela veut dire qu'il y a un autre post actuellement. Donc nous allons ajouter la dernière image à l'array
+            //Précédement crée et afficher le post précédant avant de vider l'array pour recommencer l'opération autant de fois que le for se lance qui est
+            //égal aux d'images au total pour tous les posts
+            else
+            {
+              array_push($mediaPost,[$arrayPosts[$i-1]['nomMedia'],$arrayPosts[$i-1]['extMedia']]); 
 
-          //Affiche le post
-          echo
-           "<div class=\"card mb-4\"> ";
-                //Affiche chaque images
-                foreach($mediaPost as $media)
-                {              
-                  if($media[1] == "mp4" || $media[1] == "ogg" || $media[1] == "webm")
-                  echo "
-                  <video autoplay controls loop>
-                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mp4\">
-                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/ogg\">
-                  <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/webm\">
-                  Your browser does not support the video tag.
-                  </video>";
-                  else if ($media[1] == "mpeg" || $media[1] == "ogg")
-                  {
+              //Affiche le post
+              echo
+              "<div class=\"card mb-4\"> ";
+                    //Affiche chaque images
+                    foreach($mediaPost as $media)
+                    {              
+                      if($media[1] == "mp4" || $media[1] == "ogg" || $media[1] == "webm")
                       echo "
-                      <audio  controls>
-                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"audio/ogg\">
-                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mpeg\">
-                      </audio>";
-                  }
-                  else
-                 echo "<img style=\"width:300px;height:250px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
-                }
-               echo " <div class=\"card-body\"> 
-                <p class=\"card-text\">";
-                //Affiche le commentaire
-                echo $arrayPosts[$i-1]['postCommentaire'];
-                echo "</p>
-                  <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> 
-                  <a href=\"../php/deleteFile.php?idPost=". $arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Supprimer le post</a>
-                  </div> 
-                  <div class=\"card-footer text-muted\"> Posté le : ";
-                  //Affiche la date de création du post
-                  $dateCreationPost =  explode(" ",$arrayPosts[$i-1]['postDateCreation']);
-                  echo $dateCreationPost[0]. " à ". $dateCreationPost[1];
+                      <video autoplay controls loop>
+                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mp4\">
+                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/ogg\">
+                      <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/webm\">
+                      Your browser does not support the video tag.
+                      </video>";
+                      else if ($media[1] == "mpeg" || $media[1] == "ogg")
+                      {
+                          echo "
+                          <audio  controls>
+                          <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"audio/ogg\">
+                          <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mpeg\">
+                          </audio>";
+                      }
+                      else
+                    echo "<img style=\"width:300px;height:250px;\"class=\"card-img-top\" src=\"../tmp/".$media[0].".".$media[1]."\" alt=\"Card image cap\">";
+                    }
+                    
+                  echo " <div class=\"card-body\"> 
+                    <p class=\"card-text\">";
+                    //Affiche le commentaire
+                    echo $arrayPosts[$i-1]['postCommentaire'];
+                    echo "</p>
+                      <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> 
+                      <a href=\"../php/deleteFile.php?idPost=". $arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Supprimer le post</a>
+                      </div> 
+                      <div class=\"card-footer text-muted\"> Posté le : ";
+                      //Affiche la date de création du post
+                      $dateCreationPost =  explode(" ",$arrayPosts[$i-1]['postDateCreation']);
+                      echo $dateCreationPost[0]. " à ". $dateCreationPost[1];
 
-                  echo " by F. Santos</div> 
-            </div>"; 
-            var_dump($mediaPost); 
-            $mediaPost = [];         
+                      echo " by F. Santos</div></div>"; 
+              
+                $mediaPost = [];         
+            }     
+          }
+          else if($arrayPosts[$i-1]['nomMedia'] == null) 
+          {     
+          echo "<div class=\"card mb-4\"> ";
+          echo " <div class=\"card-body\"> 
+                    <p class=\"card-text\">";
+                    //Affiche le commentaire
+                    echo $arrayPosts[$i-1]['postCommentaire'];
+                    echo "</p>
+                      <a href=\"#\" class=\"btn btn-primary\">UNGARead More &rarr;</a> 
+                      <a href=\"../php/deleteFile.php?idPost=". $arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Supprimer le post</a>
+                </div> 
+                      <div class=\"card-footer text-muted\"> Posté le : ";
+                      //Affiche la date de création du post
+                      $dateCreationPost =  explode(" ",$arrayPosts[$i-1]['postDateCreation']);
+                      echo $dateCreationPost[0]. " à ". $dateCreationPost[1];
+
+                      echo " by F. Santos</div></div>";
+          }
         }
-     }
-
-  
-     ?>
-     
-
-      <!-- Template Post
-        <div class="card mb-4">
-          <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-          <div class="card-body">
-            <h2 class="card-title">Post Title</h2>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-            <a href="#" class="btn btn-primary">Read More &rarr;</a>
-          </div>
-          <div class="card-footer text-muted">
-            Posted on January 1, 2020 by
-            <a href="#">Start Bootstrap</a>
-          </div>
-       </div>
-    -->
+        
+          
+      ?>
     </div>
-     
-    <!-- /.container -->
-
   </div>
+        <!-- /.container -->
+    </div>
   <!-- Footer -->
   <footer class="py-5 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; TheZone</p>
       </div>
-      <!-- /.container -->
     </footer>
 
     <!-- Bootstrap core JavaScript -->

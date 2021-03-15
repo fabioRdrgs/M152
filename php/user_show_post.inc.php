@@ -61,7 +61,7 @@ function getPostMedia($idPost)
 }
 function show_all_Posts()
 {
-  $sql = "SELECT post.id as `idPost`,post.commentaire as `postCommentaire`, post.datePost as `postDateCreation`, nomFichierMedia as `nomMedia`, typeMedia as `extMedia` FROM `media` JOIN `post` ON (media.idPost = post.id) ORDER BY post.id";
+  $sql = "SELECT post.id as `idPost`,post.commentaire as `postCommentaire`, post.datePost as `postDateCreation`, nomFichierMedia as `nomMedia`, typeMedia as `extMedia` FROM `post` LEFT JOIN `media` ON ( post.id = media.idPost) ORDER BY post.id";
   static $ps = null;
   if ($ps == null) {
     $ps = db()->prepare($sql);
