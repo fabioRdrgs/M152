@@ -1,5 +1,8 @@
-<?php
+<?php 
 require_once '../php/user_show_post.inc.php';
+$arrayPosts = show_all_Posts();
+$mediaPost =[];
+$postCount;
 if (!isset($_SESSION))
   session_start();
 $_SESSION['currentPage'] = "Home";
@@ -60,7 +63,7 @@ $_SESSION['currentPage'] = "Home";
           </div>
           <div class="card-body">
             <h6 class="card-title">F. Santos</h6>
-            <p class="card-text">239 Followers, 0 Posts</p>
+            <p class="card-text">239 Followers, <?=count($arrayPosts) ?> posts</p>
             <img src="../img/NoPFP.jpg" alt="Image de Profile" class=" card-img-bottom" style="width:20%">
           </div>
         </div>
@@ -71,8 +74,6 @@ $_SESSION['currentPage'] = "Home";
     <div class="col-md-8">
 
       <?php
-      $arrayPosts = show_all_Posts();
-      $mediaPost =[];
         //For permettant d'afficher chaque posts
       for($i = 1; $i <= count($arrayPosts);$i++)
       {
@@ -121,7 +122,7 @@ $_SESSION['currentPage'] = "Home";
                     //Affiche le commentaire
                     echo $arrayPosts[$i-1]['postCommentaire'];
                     echo "</p>
-                      <a href=\"#\" class=\"btn btn-primary\">Read More &rarr;</a> 
+                      <a href=\"../Post/index.php?idPost=".$arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Modifier le post</a> 
                       <a href=\"../php/deleteFile.php?idPost=". $arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Supprimer le post</a>
                       </div> 
                       <div class=\"card-footer text-muted\"> Posté le : ";
@@ -142,8 +143,8 @@ $_SESSION['currentPage'] = "Home";
                     //Affiche le commentaire
                     echo $arrayPosts[$i-1]['postCommentaire'];
                     echo "</p>
-                      <a href=\"#\" class=\"btn btn-primary\">UNGARead More &rarr;</a> 
-                      <a href=\"../php/deleteFile.php?idPost=". $arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Supprimer le post</a>
+                    <a href=\"../Post/index.php?idPost=".$arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Modifier le post</a> 
+                    <a href=\"../php/deleteFile.php?idPost=". $arrayPosts[$i-1]['idPost']."\" class=\"btn btn-primary\">Supprimer le post</a>
                 </div> 
                       <div class=\"card-footer text-muted\"> Posté le : ";
                       //Affiche la date de création du post

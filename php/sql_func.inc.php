@@ -126,7 +126,7 @@ $sqlAddImage = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VAL
       {   
         $req2->bindParam(':NOM',$img[0],PDO::PARAM_STR);
         $req2->bindParam(':EXT',$img[1],PDO::PARAM_STR);
-        $req2->bindParam('IDPOST',$idPost,PDO::PARAM_INT);
+        $req2->bindParam(':IDPOST',$idPost,PDO::PARAM_INT);
         $req2->execute();
       }
     }
@@ -138,10 +138,11 @@ $sqlAddImage = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VAL
     }
 }
 
-function update($idPost,$commentaire,$listImages)
+function updatePost($idPost,$commentaire,$UserPostMedia)
 {
   try
   {
+    db()->beginTransaction();
     static $ps = null;
     $sql = "UPDATE `post` SET ";
     $sql .= "`commentaire` = :COMMENTAIRE ";
@@ -155,7 +156,7 @@ function update($idPost,$commentaire,$listImages)
    $ps->bindParam('IDPOST', $idPost,PDO::PARAM_INT);
    $ps->execute();
 
-   if($listImages != null)
+   if($UserPostMedia != null)
     { static $psMedia = null;
       $sqlMedia = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VALUES (:NOM,:EXT,:IDPOST)";
       if ($psMedia == null) 
@@ -170,10 +171,10 @@ function update($idPost,$commentaire,$listImages)
       }
      $psMediaDelete->bindParam('IDPOST', $idPost,PDO::PARAM_INT);
      $psMediaDelete->execute();
-      foreach($listImages as $img)
+      foreach($UserPostMedia as $media)
       {   
-        $psMedia->bindParam(':NOM',$img[0],PDO::PARAM_STR);
-        $psMedia->bindParam(':EXT',$img[1],PDO::PARAM_STR);
+        $psMedia->bindParam(':NOM',$media[0],PDO::PARAM_STR);
+        $psMedia->bindParam(':EXT',$media[1],PDO::PARAM_STR);
         $psMedia->bindParam('IDPOST',$idPost,PDO::PARAM_INT);
         $psMedia->execute();
       }
