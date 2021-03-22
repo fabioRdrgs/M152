@@ -51,9 +51,10 @@ if (isset($_GET['idPost'])) {
     <label for=\"fileSelect\"> Select a file:</label> <input id=\"fileSelect\" accept=\".png, .bmp, .jpg, .jpeg, .gif, .mp4, .mp3, .ogg\" type=\"file\" name=\"mediaSelect[]\" multiple>
     <input name=\"submit\" type=\"submit\">
   </form>";
-    echo "Images du post : ";
+   
     if ($infoPost[0]['nomMedia'] != null)
       for ($i = 0; $i < count($infoPost); $i++) {
+        echo "Images du post : ";
         echo "<img style=\"width:300px;height:250px;\"class=\"card-img-top\" src=\"../tmp/" . $infoPost[$i]['nomMedia'] . "." . $infoPost[$i]['extMedia'] . "\" alt=\"Card image cap\">";
       }
   }
@@ -167,8 +168,9 @@ if (isset($_GET['idPost'])) {
         else
         {
          echo "Post créé";
-         header('location: ../Home/index.php');
+         
         }
+        header('location: ../Home/index.php');
       } 
       else
       {
