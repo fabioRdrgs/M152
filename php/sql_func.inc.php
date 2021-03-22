@@ -116,16 +116,19 @@ $sqlAddImage = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VAL
     $idPost = db()->lastInsertId();
 
 
-    static $req2 = null;
-    if($req2 == null)
-    $req2 = db()->prepare($sqlAddImage);
-  
-    foreach($listImages as $img)
-    {   
-    $req2->bindParam(':NOM',$img[0],PDO::PARAM_STR);
-    $req2->bindParam(':EXT',$img[1],PDO::PARAM_STR);
-    $req2->bindParam('IDPOST',$idPost,PDO::PARAM_INT);
-    $req2->execute();
+    if($listImages!= null)
+    {
+      static $req2 = null;
+      if($req2 == null)
+      $req2 = db()->prepare($sqlAddImage);
+    
+      foreach($listImages as $img)
+      {   
+        $req2->bindParam(':NOM',$img[0],PDO::PARAM_STR);
+        $req2->bindParam(':EXT',$img[1],PDO::PARAM_STR);
+        $req2->bindParam(':IDPOST',$idPost,PDO::PARAM_INT);
+        $req2->execute();
+      }
     }
     db()->commit();
     return true;
@@ -135,55 +138,93 @@ $sqlAddImage = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VAL
     }
 }
 
-function update($content1, $content2, $content3, $content4, $content5)
+function updatePost($idPost,$commentaire,$UserPostMedia)
 {
-  static $ps = null;
+  try
+  {
+    db()->beginTransaction();
+    static $ps = null;
+    $sql = "UPDATE `post` SET ";
+    $sql .= "`commentaire` = :COMMENTAIRE ";
+    $sql .= "WHERE (`id` = :IDPOST)";
+    if ($ps == null) 
+    {
+      $ps = db()->prepare($sql);
+    }
 
-  $sql = "UPDATE `table` SET ";
-  $sql .= "`content1` = :CONTENT1, ";
-  $sql .= "`content2` = :CONTENT2, ";
-  $sql .= "`content3` = :CONTENT3, ";
-  $sql .= "`content4` = :CONTENT4 ";
-  $sql .= "WHERE (`content5` = :CONTENT5)";
-  if ($ps == null) {
-    $ps = db()->prepare($sql);
+   $ps->bindParam(':COMMENTAIRE',$commentaire,PDO::PARAM_STR);
+   $ps->bindParam('IDPOST', $idPost,PDO::PARAM_INT);
+   $ps->execute();
+
+   if($UserPostMedia != null)
+    { static $psMedia = null;
+      $sqlMedia = "INSERT INTO `media` (`nomFichierMedia`,`typeMedia`,`idPost`) VALUES (:NOM,:EXT,:IDPOST)";
+      if ($psMedia == null) 
+      {
+        $psMedia = db()->prepare($sqlMedia);
+      }
+      static $psMediaDelete = null;
+      $sqlMediaDelete = "DELETE FROM `media` WHERE (`idPost` = :IDPOST)";
+      if ($psMediaDelete == null) 
+      {
+        $psMediaDelete = db()->prepare($sqlMediaDelete);
+      }
+     $psMediaDelete->bindParam('IDPOST', $idPost,PDO::PARAM_INT);
+     $psMediaDelete->execute();
+      foreach($UserPostMedia as $media)
+      {   
+        $psMedia->bindParam(':NOM',$media[0],PDO::PARAM_STR);
+        $psMedia->bindParam(':EXT',$media[1],PDO::PARAM_STR);
+        $psMedia->bindParam('IDPOST',$idPost,PDO::PARAM_INT);
+        $psMedia->execute();
+      }
+   }
+   db()->commit();
+   return true;
   }
-  $answer = false;
-  try {
-     $ps->bindParam(':CONTENT1', $content1, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT2', $content2, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT3', $content3, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT4', $content4, PDO::PARAM_STR);
-    $ps->bindParam(':CONTENT5', $content5, PDO::PARAM_STR);
-    $ps->execute();
-    $answer = ($ps->rowCount() > 0);
-  } catch (PDOException $e) {
-    echo $e->getMessage();
+  catch(PDOException $e)
+  {
+    db()->rollBack();
+    return false;
   }
-  return $answer;
 }
 
 /**
  * Supprime la note ave l'id $idnote.
- * @param mixed $idnote 
+ * @param int $idnote 
  * @return bool 
  */
 function deletePost($idPost)
 {
-  static $ps = null;
-  $sql = "DELETE FROM `post` WHERE (`id` = :ID);";
-  if ($ps == null) {
-    $ps = db()->prepare($sql);
-  }
-  $answer = false;
-  try {
-    $ps->bindParam(':ID', $idPost, PDO::PARAM_INT);
-    $ps->execute();
-    $answer = true;
-  } catch (PDOException $e) {
-    echo $e->getMessage();
-  }
-  return $answer;
+    try 
+    {
+      static $ps = null;
+      $sql = "DELETE FROM `post` WHERE (`id` = :ID);";
+      if ($ps == null) 
+      {
+        $ps = db()->prepare($sql);
+      }
+      db()->beginTransaction();
+      $ps->bindParam(':ID', $idPost, PDO::PARAM_INT);
+      $ps->execute();
+
+      static $psMediaDelete = null;
+      $sqlMediaDelete = "DELETE FROM `media` WHERE `idPost` is NULL;";
+      if ($psMediaDelete == null) 
+      {
+        $psMediaDelete = db()->prepare($sqlMediaDelete);
+      }
+      $psMediaDelete->execute();    
+      
+      db()->commit();
+      return true;
+    } 
+    catch (PDOException $e) 
+    {
+      db()->rollBack();
+      return false;
+    }
+
 }
 
 
