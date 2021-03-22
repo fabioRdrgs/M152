@@ -108,7 +108,7 @@ $_SESSION['currentPage'] = "Home";
                       else if ($media[1] == "mpeg" || $media[1] == "ogg")
                       {
                           echo "
-                          <audio  controls>
+                          <audio autostart=\"false\" controls>
                           <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"audio/ogg\">
                           <source  src=\"../tmp/".$media[0].".".$media[1]."\" type=\"video/mpeg\">
                           </audio>";
