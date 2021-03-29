@@ -13,6 +13,7 @@ if (isset($_GET['idPost'])) {
   $infoPost = show_post_by_id($_GET['idPost']);
 }
 //echo $_GET['idPost'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,18 +39,18 @@ if (isset($_GET['idPost'])) {
 
   <!--#region Navigation  -->
   <!-- Navigation -->
-  <?php include_once "../php/navbar.php" ?>
+  <?php include_once "../php/navbar.php"; var_dump($commentairePost);?>
   <!--#endregion -->
   <?php
   //var_dump($infoPost);
   //Teste si on est là pour modifier un post ou en créer un
   if (isset($_GET['idPost'])) {
     //Affiche les champs permettant de modifier le post choisi
-    echo "<form action=\"./index.php?idPost=" . $_GET['idPost'] . "\" method=\"POST\" enctype=\"multipart/form-data\">
+    echo "<form id=\"updateForm\" action=\"./index.php?idPost=" . $_GET['idPost'] . "\" method=\"POST\" enctype=\"multipart/form-data\">
     <label for=\"postTextArea\">Entrez du text</label></br>
     <textarea required name=\"postTextArea\" id=\"postTextArea\" rows=\"3\" cols=\"50\">" . $infoPost[0]['postCommentaire'] . "</textarea></br>
     <label for=\"fileSelect\"> Select a file:</label> <input id=\"fileSelect\" accept=\".png, .bmp, .jpg, .jpeg, .gif, .mp4, .mp3, .ogg\" type=\"file\" name=\"mediaSelect[]\" multiple>
-    <input name=\"submit\" type=\"submit\">
+    <input id=\"update\" name=\"submit\" type=\"submit\">
   </form>";
    
     if ($infoPost[0]['nomMedia'] != null)
@@ -283,6 +284,6 @@ if (isset($_GET['idPost'])) {
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script src="../js/update-post.js"></script>
 </body>
 </html>

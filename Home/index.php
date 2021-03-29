@@ -132,8 +132,16 @@ $_SESSION['currentPage'] = "Home";
                       <div class=\"card-footer text-muted\"> Posté le : ";
               //Affiche la date de création du post
               $dateCreationPost =  explode(" ", $arrayPosts[$i - 1]['postDateCreation']);
+
+              if($arrayPosts[$i-1]['postDateModif'] != null)
+              $dateModifPost = explode(" ", $arrayPosts[$i-1]['postDateModif']);
+              else
+              $dateModifPost = null;
+
               echo $dateCreationPost[0] . " à " . $dateCreationPost[1];
 
+            if($dateModifPost != null)
+              echo " modifié le ". $dateModifPost[0]. " à ".$dateModifPost[1];
               echo " by F. Santos</div></div>";
 
               $mediaPost = [];
@@ -151,11 +159,20 @@ $_SESSION['currentPage'] = "Home";
                     <a href=\"../php/deleteFile.php?idPost=" . $arrayPosts[$i - 1]['idPost'] . "\" class=\"btn btn-primary\">Supprimer le post</a>
                 </div> 
                       <div class=\"card-footer text-muted\"> Posté le : ";
-            //Affiche la date de création du post
-            $dateCreationPost =  explode(" ", $arrayPosts[$i - 1]['postDateCreation']);
-            echo $dateCreationPost[0] . " à " . $dateCreationPost[1];
+              //Affiche la date de création du post
+              $dateCreationPost =  explode(" ", $arrayPosts[$i - 1]['postDateCreation']);
 
-            echo " by F. Santos</div></div>";
+              if($arrayPosts[$i-1]['postDateModif'] != null)
+              $dateModifPost = explode(" ", $arrayPosts[$i-1]['postDateModif']);
+              else
+              $dateModifPost = null;
+
+              echo $dateCreationPost[0] . " à " . $dateCreationPost[1];
+
+            if($dateModifPost != null)
+              echo " modifié le ". $dateModifPost[0]. " à ".$dateModifPost[1];
+              echo " by F. Santos</div></div>";
+
           }
         }
 
