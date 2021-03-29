@@ -20,9 +20,14 @@ function SendAjaxRequest()
    var $inputs = $form.find("input");
 
 // Serialize the data in the form
+//Différentes tentatives : 
+
    // var serializedData = $form.find("input, textarea, #update").serialize();
+
   //var serializedData = $("#updateForm").serializeArray();
+
    //serializedData.push({name:$("#update").name,value:$("#update").value})
+
 //var serializedData =  $form.find("input").serialize()
 
     // Let's disable the inputs for the duration of the Ajax request.
