@@ -1,8 +1,8 @@
 var request;
-//$("#update").on('click',function(event){
- //event.preventDefault();
- //SendAjaxRequest();
-//})
+$("#update").on('click',function(event){
+ event.preventDefault();
+ SendAjaxRequest();
+})
 
 function SendAjaxRequest()
 {
@@ -12,6 +12,7 @@ function SendAjaxRequest()
     //var serializedData = new FormData();
     //serializedData.append('postTextArea', "aabbccc") ;
     //serializedData.append('mediaSelect', $('#fileSelect').val()) ;
+
     // setup some local variables
    var $form = $("Form");
 
@@ -20,8 +21,8 @@ function SendAjaxRequest()
 
 // Serialize the data in the form
    // var serializedData = $form.find("input, textarea, #update").serialize();
-   var serializedData = $("#updateForm").serializeArray();
-   serializedData.push({name:$("#update").name,value:$("#update").value})
+  //var serializedData = $("#updateForm").serializeArray();
+   //serializedData.push({name:$("#update").name,value:$("#update").value})
 //var serializedData =  $form.find("input").serialize()
 
     // Let's disable the inputs for the duration of the Ajax request.
@@ -31,11 +32,12 @@ function SendAjaxRequest()
 
     // Fire off the request to /form.php
     request = $.ajax({
-        url:"./index.php",
+        url:"./index.php?idPost=101",
         type:"POST",
-        data: serializedData,
-        dataType:"json",
-        processDate: false,
+       // data: serializedData,
+       data: $('#updateForm').serialize(),
+        //dataType:"text",
+          processDate: false,
         contentType:false
     });
 
